@@ -1,25 +1,19 @@
 #!/usr/bin/python3
-""" lockboxes """
-
-
-def join(B, K):
-    """ helper """
-    result = []
-    for k in K:
-        result += B[k]
-    return result
+'''lockboxes module
+'''
 
 
 def canUnlockAll(boxes):
-    """ check each box """
-    index = 0
-    total = list(set(boxes[0]) | {0})
-    added = True
-    while added:
-        added = False
-        for j in join(boxes, total[index:]):
-            if j not in total:
-                total.append(j)
-                index += 1
-                added = True
-    return len(total) == len(boxes)
+    '''Checks each box
+    '''
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
